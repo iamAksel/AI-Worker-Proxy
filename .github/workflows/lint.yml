@@ -1,4 +1,4 @@
-name: Lint and Type Check
+name: Lint, Type Check and Deploy
 
 on:
   pull_request:
@@ -18,7 +18,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22' # Мы подняли версию до 22, чтобы не было ошибки с sqlite
           cache: 'npm'
 
       - name: Install dependencies
@@ -32,3 +32,16 @@ jobs:
 
       - name: Check formatting
         run: npx prettier --check "src/**/*.ts"
+
+  deploy:
+    name: Deploy to Cloudflare
+    needs: lint # Это заставляет деплой запускаться ТОЛЬКО если проверка кода прошла успешно
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Deploy to Cloudflare Workers
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          command: deploy
