@@ -1,6 +1,7 @@
 name = "ai-worker-proxy"
 main = "src/index.ts"
 compatibility_date = "2024-01-01"
+account_id = "7aa269c34c85e76bcd155feb4c151fba" # <--- ДОБАВЬТЕ ЭТУ СТРОКУ
 
 # Cloudflare AI binding (optional)
 [ai]
